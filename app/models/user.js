@@ -1,6 +1,7 @@
-let mongoose = require('mongoose');
+let mongoose = require('mongoose')
 let Schema = mongoose.Schema;
 let bcrypt = require('bcryptjs')
+let passportLocalMongoose = require('passport-local-mongoose')
 
 var UserSchema = new Schema({
     dogName: {
@@ -17,31 +18,12 @@ var UserSchema = new Schema({
         type: String,
         required: true
     },
-    sis: String,
     coordX: String,
     coordY: String
-
 });
 
-UserSchema.pre('save', function (next) {
-    var user = this;
-
-    // only hash the password if it has been modified (or is new)
-    if (!user.isModified('sis')) return next();
-
-    // generate a salt
-    bcrypt.genSalt(10, function (err, salt) {
-        if (err) return next(err);
-
-        // hash the password using our new salt
-        bcrypt.hash(user.sis, salt, function (err, hash) {
-            if (err) return next(err);
-
-            // override the cleartext password with the hashed one
-            user.sis = hash;
-            next();
-        });
-    });
-});
+// Passport-Local Mongoose will add a username, hash and salt field 
+// to store the username, the hashed password and the salt value.
+UserSchema.plugin(passportLocalMongoose, { saltlen: 10, saltField: 'sis', usernameField: 'email' });
 
 module.exports = mongoose.model('user', UserSchema);
