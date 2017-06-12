@@ -5,7 +5,7 @@ let mongoose = require('mongoose');
 let morgan = require('morgan');
 let bodyParser = require('body-parser');
 let port = 8080;
-let book = require('./app/routes/book');
+let user = require('./app/routes/user');
 let config = require('config'); //we load the db location from the JSON files
 //db options
 let options = { 
@@ -30,15 +30,16 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.text());                                    
 app.use(bodyParser.json({ type: 'application/json'}));  
 
-app.get("/", (req, res) => res.json({message: "Welcome to our Bookstore!"}));
+app.get("/", (req, res) => res.json({message: "Welcome!"}));
 
-app.route("/book")
-	.get(book.getBooks)
-	.post(book.postBook);
-app.route("/book/:id")
-	.get(book.getBook)
-	.delete(book.deleteBook)
-	.put(book.updateBook);
+app.route("/user")
+	.get(user.getUsers)
+	.post(user.postUser);
+
+app.route("/user/:id")
+	.get(user.getUser)
+	.delete(user.deleteUser)
+	.put(user.updateUser);
 
 
 app.listen(port);

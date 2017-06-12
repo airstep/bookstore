@@ -1,11 +1,12 @@
 {
-  "name": "bookstore",
+  "name": "userstore",
   "version": "1.0.0",
-  "description": "A bookstore API",
+  "description": "A userstore API",
   "main": "server.js",
   "author": "Sam",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.15.1",
     "config": "^1.20.1",
     "express": "^4.13.4",
