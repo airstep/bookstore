@@ -54,7 +54,6 @@ describe('Users', () => {
 			  	res.body.should.be.a('object');
 			  	res.body.should.have.property('errors');
 			  	res.body.errors.should.have.property('email');
-			  	//res.body.errors.pages.should.have.property('id').eql('required');
 		      done();
 		    });
 	  });
