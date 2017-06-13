@@ -4,20 +4,11 @@ let bcrypt = require('bcryptjs')
 let passportLocalMongoose = require('passport-local-mongoose')
 
 var UserSchema = new Schema({
-    dogName: {
-        type: String,
-        required: true
-    },
+    dogName: { type: String, required: true },
     gender: String,
     age: String,
-    ownerName: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true
-    },
+    ownerName: { type: String, required: true },
+    email: { type: String, required: true },
     coordX: String,
     coordY: String
 });

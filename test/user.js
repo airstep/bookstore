@@ -10,7 +10,6 @@ let chaiHttp = require('chai-http');
 let server = require('../server');
 let should = chai.should();
 
-
 chai.use(chaiHttp);
 
 //Our parent block
@@ -21,8 +20,8 @@ describe('Users', () => {
 		});		
 	});
 
-  describe('/GET user', () => {
-	  it('it should GET all the Users', (done) => {
+  describe('list user', () => {
+	  it('it should list all the Users', (done) => {
 			chai.request(server)
 		    .get('/user')
 		    .end((err, res) => {
@@ -34,15 +33,14 @@ describe('Users', () => {
 	  });
   });
 
-  describe('/POST user', () => {
-	  it('it should not POST a user without email field', (done) => {
+  describe('add user', () => {
+	  it('it should not ADD a user without email field', (done) => {
 			let user = {       
 				"dogName" : "Dingo",        
 				"gender" : "male",        
 				"age" : "2",        
 				"ownerName": "avi",        
 				//"email": "dingo@gmail.com",        
-				"sis": "321",        
 				"coordX" : "374.3",        
 				"coordY" : "789.6"      
 			};
@@ -57,14 +55,13 @@ describe('Users', () => {
 		      done();
 		    });
 	  });
-	  it('it should POST a user ', (done) => {
+	  it('it should add a user ', (done) => {
 			let user = {       
 				"dogName" : "Dingo",        
 				"gender" : "male",        
 				"age" : "2",        
 				"ownerName": "avi",        
 				"email": "dingo@gmail.com",        
-				"sis": "321",        
 				"coordX" : "374.3",        
 				"coordY" : "789.6"      
 			};
@@ -82,7 +79,7 @@ describe('Users', () => {
 	  });
   });
 
-  describe('/GET/:id user', () => {
+  describe('get user', () => {
 	  it('it should GET a user by the given id', (done) => {
 			let user = new User({       
 				"dogName" : "Dingo",        
@@ -90,7 +87,6 @@ describe('Users', () => {
 				"age" : "2",        
 				"ownerName": "avi",        
 				"email": "dingo@gmail.com",        
-				"sis": "321",        
 				"coordX" : "374.3",        
 				"coordY" : "789.6"      
 			});
@@ -110,7 +106,7 @@ describe('Users', () => {
 	  });
   });
 
-  describe('/PUT/:id user', () => {
+  describe('update user', () => {
 	  it('it should UPDATE a user given the id', (done) => {
 			let user = new User({       
 				"dogName" : "Dingo",        
@@ -118,7 +114,6 @@ describe('Users', () => {
 				"age" : "2",        
 				"ownerName": "avi",        
 				"email": "dingo@gmail.com",        
-				"sis": "321",        
 				"coordX" : "374.3",        
 				"coordY" : "789.6"      
 			});
@@ -138,15 +133,14 @@ describe('Users', () => {
 	  });
   });
 
-  describe('/DELETE/:id user', () => {
-	  it('it should DELETE a user given the id', (done) => {
+  describe('remove user', () => {
+	  it('it should REMOVE a user given the id', (done) => {
 				let user = new User({       
 				"dogName" : "Dingo",        
 				"gender" : "male",        
 				"age" : "2",        
 				"ownerName": "avi",        
 				"email": "dingo@gmail.com",        
-				"sis": "321",        
 				"coordX" : "374.3",        
 				"coordY" : "789.6"      
 			});
@@ -164,5 +158,59 @@ describe('Users', () => {
 		  });
 	  });
   });
+
+  describe('register user', () => {
+	  it('it should REGISTER a user', (done) => {
+			let user = {       
+				"dogName" : "Dingo",        
+				"gender" : "male",        
+				"age" : "2",        
+				"ownerName": "avi",        
+				"email": "dingo@gmail.com",        
+				"password": "testtest",
+				"coordX" : "374.3",        
+				"coordY" : "789.6"      
+			};
+
+			chai.request(server)
+		    .post('/register')
+		    .send(user)
+		    .end((err, res) => {
+			  	res.should.have.status(200);
+			  	res.body.should.be.a('object');
+		      done();
+		    });			
+	  });
+  });
+	
+  describe('login user', () => {
+	  it('it should AUTH a user', (done) => {
+				let user = new User({       
+				"email": "dingo@gmail.com",        
+				"password": "testtest"
+			});
+
+			chai.request(server)
+		    .post('/login')
+		    .send(user)
+		    .end((err, res) => {
+			  	res.should.have.status(200);
+			  	res.body.should.be.a('object');
+		      done();
+		    });			
+	  });
+  });	
+
+  describe('logout user', () => {
+	  it('it should LOGOUT a user', (done) => {
+			chai.request(server)
+		    .post('/logout')
+		    .end((err, res) => {
+			  	res.should.have.status(200);
+			  	res.body.should.have.property('message').eql('ok');
+		      done();
+		    });			
+	  });
+  });		
 });
   

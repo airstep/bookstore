@@ -47,14 +47,23 @@ app.use(bodyParser.json({	type: 'application/json' }))
 app.get("/", (req, res) => res.json({ message: "Welcome!" }))
 
 app.route("/user")
-	.get(user.getUsers)
-	.post(user.postUser)
+	.get(user.list)
+	.post(user.add)
 
 app.route("/user/:id")
-	.get(user.getUser)
-	.delete(user.deleteUser)
-	.put(user.updateUser)
+	.get(user.get)
+	.delete(user.remove)
+	.put(user.update)
 
+app.route("/register")
+	.post(user.register)
+
+app.route("/login")
+	.post(user.login)
+
+app.route("/logout")
+	.post(user.logout)
+	
 app.listen(port)
 console.log("Listening on port " + port)
 
