@@ -14,7 +14,7 @@ chai.use(chaiHttp);
 
 //Our parent block
 describe('Users', () => {
-	beforeEach((done) => {
+	before((done) => {
 		User.remove({}, (err) => { 
 		   done();		   
 		});		
@@ -159,7 +159,13 @@ describe('Users', () => {
 	  });
   });
 
-  describe('register user', () => {
+  describe('register, login and logout user', () => {
+		before((done) => {
+			User.remove({}, (err) => { 
+				done();		   
+			});		
+		});
+		
 	  it('it should REGISTER a user', (done) => {
 			let user = {       
 				"dogName" : "Dingo",        
@@ -181,27 +187,24 @@ describe('Users', () => {
 		      done();
 		    });			
 	  });
-  });
-	
-  describe('login user', () => {
+
 	  it('it should AUTH a user', (done) => {
-				let user = new User({       
+			let params = {       
 				"email": "dingo@gmail.com",        
 				"password": "testtest"
-			});
+			}
 
 			chai.request(server)
 		    .post('/login')
-		    .send(user)
+		    .send(params)
 		    .end((err, res) => {
 			  	res.should.have.status(200);
 			  	res.body.should.be.a('object');
+					res.body.should.not.have.property('error');
 		      done();
 		    });			
 	  });
-  });	
 
-  describe('logout user', () => {
 	  it('it should LOGOUT a user', (done) => {
 			chai.request(server)
 		    .post('/logout')

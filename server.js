@@ -1,4 +1,5 @@
 let express = require('express')
+let session = require('express-session')
 let app = express()
 let mongoose = require('mongoose')
 let morgan = require('morgan')
@@ -35,8 +36,19 @@ if (config.util.getEnv('NODE_ENV') !== 'test') {
 	app.use(morgan('combined')) //'combined' outputs the Apache style LOGs
 }
 
+app.use(session({
+  secret: 'ooNgu0wae8oiJae5Cagh',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}))
+
+// Configure passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
 // mongoose local auth: https://github.com/saintedlama/passport-local-mongoose
-passport.use(User.createStrategy());
+passport.use(User.createStrategy())
 
 //parse application/json and look for raw text                                        
 app.use(bodyParser.json())

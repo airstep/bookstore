@@ -23,6 +23,7 @@ function add(req, res) {
 
 function register(req, res) {
 	var newUser = new User(req.body);
+	newUser.username = newUser.email;
 	User.register(newUser, req.body.password, (err, user) => {
 		if(err) {
 			res.send(err);
@@ -34,17 +35,20 @@ function register(req, res) {
 }
 
 function login(req, res) {
-	var user = new User(req.body);
-	User.authenticate()(user.email, user.password, (err, user, message)  => {
+	User.authenticate()(req.body.email, req.body.password, (err, user, error)  => {
 		if (err)
 			res.send(err);
+		else if (error)
+			res.json({ error : error });
 		else
-			res.json({message: "User successfully registered!", user });
+			res.json(user);
 	});
 }
 
 function logout(req, res) {
-  req.logOut();
+  req.logout(err => {
+		console.log('logout');
+	});
 	if (req.session) {
 		req.session.destroy(function (err) {
 			if (err) { return next(err); }
@@ -67,7 +71,7 @@ function get(req, res) {
 }
 
 /*
- * DELETE /user/:id to delete a user given its id.
+ * REMOVE /user/:id to delete a user given its id.
  */
 function remove(req, res) {
 	User.remove({_id : req.params.id}, (err, result) => {
